@@ -10,8 +10,12 @@
   "author": "mikanda IT Solutions",
   "license": "GPL",
   "dependencies": {
+    "ejs": "git://github.com/visionmedia/ejs.git",
+    "string-stream": "*"
+  },
+  "devDependencies": {
     "supertest": "*",
     "should": "*",
-    "ejs": "git://github.com/visionmedia/ejs.git"
+    "mockery": "*"
   }
 }

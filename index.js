@@ -92,7 +92,7 @@ module.exports.backend = {};
 files = fs.readdirSync(__dirname + '/backend');
 files.forEach(
   function (f) {
-    var m = f.match(/^(.+)\.js/);
+    var m = f.match(/^(.+)\.js$/);
     if (m) {
       module.exports.backend[m[1]] = require('./backend/' + m[1]);
     }

@@ -1,5 +1,7 @@
 var fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    StringStream = require('string-stream'),
+    nodeTex = require('node-tex');
 
 /**
  * This is a backend for mistore that is used to render latex documents as pdf
@@ -9,15 +11,29 @@ var fs = require('fs'),
  */
 
 module.exports = function (app, ctx, callback) {
-  var config = ctx.configuration,
+  var config = ctx.configuration || {},
       latexTemp;
   config = config.mistore || {};
   latexTemp = config.latexTemp || '/tmp';
   app.use(function (req, res, next) {
     var mistore = req.mistore;
-    function Backend(context, stream) {
+    function Backend(context, stream, ctx) {
       var blocker = this.blocker = null;
-      function render() {
+      function render(dependecyStreams) {
+        var EJSLatex = req.mistore.backend['ejs-latex'],
+            stringStream = new StringStream(),
+            ejsLatex,
+            dependecyStreams = dependecyStreams || [];
+        stringStream.on('end', function () {
+          nodeTex(
+            stringStream,
+            dependecyStreams,
+            function (error, pdfStream) {
+              pdfStream.pipe(stream);
+            }
+          );
+        });
+        ejsLatex = new EJSLatex(context, stringStream, ctx);
       }
       if (context.dependencies) {
 
@@ -31,11 +47,13 @@ module.exports = function (app, ctx, callback) {
       }
     }
     Backend.dependencyStream = function (name) {
-      var s =  fs.createWriteStream(path.join(latexTemp, name));
+      var s = new StreamString();
+      s.filename = name;
       this.blocker.push(s);
       return s;
     };
     mistore.backend.latex = Backend;
+    next();
   });
   callback();
 };

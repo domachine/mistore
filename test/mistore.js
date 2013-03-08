@@ -45,7 +45,7 @@ describe(
                   null,
                   {
                     template: 'template-text',
-                    type: 'latex',
+                    type: 'Latex',
                     dependencies: ['dep-doc']
                   }
                 );
@@ -90,7 +90,7 @@ describe(
                 this.blocker.push(s);
                 return s;
               };
-              req.mistore.backend.latex = Backend;
+              req.mistore.backend.Latex = Backend;
               req.mistore.backend.latexInc = function (context, stream) {
                 try {
                   context.template.should.equal('dep-template-text');
