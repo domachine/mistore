@@ -98,4 +98,4 @@ files.forEach(
     }
   }
 );
-module.exports.Blocker = require('./blocker');
+module.exports.Blocker = require('./lib/blocker');

@@ -69,7 +69,7 @@ describe(
             app.use(function (req, res, next) {
               var backend;
               function Backend(context, stream) {
-                var blocker = this.blocker = new (require('../blocker'))(
+                var blocker = this.blocker = new mistore.Blocker(
                   context.dependencies.length
                 );
                 blocker.on(
