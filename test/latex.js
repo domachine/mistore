@@ -7,7 +7,8 @@ require('should');
 describe('LaTeX Backend', function () {
   before(function () {
     mockery.enable({
-      useCleanCache: true
+      useCleanCache: true,
+      warnOnUnregistered: false
     });
     mockery.registerMock('node-tex', function (stream, deps, callback) {
       var stringStream = new StringStream();

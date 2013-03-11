@@ -20,15 +20,26 @@ module.exports = function (app, ctx, callback) {
     function Backend(context, stream, ctx) {
       var blocker = this.blocker = null;
       function render(dependecyStreams) {
+
+        /*! The renderer itself uses the ejs-latex backend to generate the tex
+         * source. */
+
         var EJSLatex = req.mistore.backend['ejs-latex'],
             stringStream = new StringStream(),
             ejsLatex,
             dependecyStreams = dependecyStreams || [];
         stringStream.on('end', function () {
+
+          /*! The generated source is then fed into node-tex. */
+
           nodeTex(
             stringStream,
             dependecyStreams,
             function (error, pdfStream) {
+
+              /*! Which then produces the PDF stream which is exposed to the
+               * output */
+
               pdfStream.pipe(stream);
             }
           );
