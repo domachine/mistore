@@ -10,8 +10,8 @@ var fs = require('fs'),
  * using pdflualatex.
  */
 
-module.exports = function (app, ctx, callback) {
-  var config = ctx.configuration || {},
+module.exports = function (app, callback) {
+  var config = this.configuration || {},
       latexTemp;
   config = config.mistore || {};
   latexTemp = config.latexTemp || '/tmp';

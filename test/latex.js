@@ -29,9 +29,9 @@ describe('LaTeX Backend', function () {
     /*! First the mistore machinery is installed.  This will load the ejs
      * backend automatically so that we can test it. */
 
-    mistore(app, {}, function () {
-      mistore.backend['ejs-latex'](app, {}, function () {
-        mistore.backend['latex'](app, {}, function () {
+    mistore(app, function () {
+      mistore.backend['ejs-latex'](app, function () {
+        mistore.backend['latex'](app, function () {
           app.get('*', function (req, res) {
             req.mistore.render(
               {

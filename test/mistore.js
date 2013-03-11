@@ -64,7 +64,6 @@ describe(
         });
         mistore(
           app,
-          {},
           function () {
             app.use(function (req, res, next) {
               var backend;
