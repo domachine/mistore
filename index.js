@@ -2,7 +2,7 @@ var fs = require('fs'),
     isArray = require('util').isArray,
     async = require('async'),
     files;
-module.exports = function (app, ctx, callback) {
+module.exports = function (app, next) {
   app.use(function (req, res, next) {
 
     /**
@@ -83,7 +83,7 @@ module.exports = function (app, ctx, callback) {
     };
     next();
   });
-  callback();
+  next();
 };
 
 /* Load all available backends into namespace. */
