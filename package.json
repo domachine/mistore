@@ -1,6 +1,6 @@
 {
   "name": "mistore",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ERROR: No README.md file found!",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,9 @@
   "license": "GPL",
   "dependencies": {
     "ejs": "git://github.com/visionmedia/ejs.git",
-    "string-stream": "*"
+    "string-stream": "*",
+    "node-tex": "*",
+    "escape-latex": "*"
   },
   "devDependencies": {
     "supertest": "*",

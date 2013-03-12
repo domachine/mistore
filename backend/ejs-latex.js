@@ -1,7 +1,6 @@
-var ejs = require('ejs'),
-    lescape = require('escape-latex');
 module.exports = function (app, next) {
-  var options = this.ejs || {};
+  var ejs = require('ejs'),
+      lescape = require('escape-latex');
   function Backend(doc, stream, docCtx) {
     var opts = doc.ejs || {};
     opts.locals = opts.locals || {};

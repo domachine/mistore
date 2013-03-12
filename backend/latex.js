@@ -1,7 +1,3 @@
-var fs = require('fs'),
-    path = require('path'),
-    StringStream = require('string-stream'),
-    nodeTex = require('node-tex');
 
 /**
  * This is a backend for mistore that is used to render latex documents as pdf
@@ -11,7 +7,11 @@ var fs = require('fs'),
  */
 
 module.exports = function (app, callback) {
-  var config = this.configuration || {},
+  var fs = require('fs'),
+      path = require('path'),
+      StringStream = require('string-stream'),
+      nodeTex = require('node-tex'),
+      config = this.configuration || {},
       latexTemp;
   config = config.mistore || {};
   latexTemp = config.latexTemp || '/tmp';
