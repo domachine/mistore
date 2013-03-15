@@ -66,38 +66,34 @@ describe(
           app,
           function () {
             app.use(function (req, res, next) {
-              var backend;
-              function Backend(context, stream) {
-                var blocker = this.blocker = new mistore.Blocker(
-                  context.dependencies.length
-                );
-                blocker.on(
-                  'end',
-                  function (s) {
-                    try {
-                      context.template.should.equal('template-text');
-                      s[0].buffer.should.equal('dep-test');
-                      stream.end('test');
-                    } catch (x) {
-                      done(x);
-                    }
-                  }
-                );
+              var backend,
+                  LatexInc,
+                  mistore;
+              function Backend() {
+                this._dependencyStreams = [];
               }
+              Backend.prototype.start = function (doc, stream, arg, next) {
+                var s = this._dependencyStreams;
+                doc.template.should.equal('template-text');
+                s[0].buffer.should.equal('dep-test');
+                stream.end('test');
+                next();
+              };
               Backend.prototype.dependencyStream = function (name) {
                 var s = new Stream();
-                this.blocker.push(s);
+                this._dependencyStreams.push(s);
                 return s;
               };
-              req.mistore.backend.Latex = Backend;
-              req.mistore.backend.latexInc = function (context, stream) {
-                try {
-                  context.template.should.equal('dep-template-text');
-                  stream.end('dep-test');
-                } catch (x) {
-                  done(x);
-                }
+              mistore = req.mistore;
+              mistore.backend.Latex = Backend;
+              mistore.backend.latexInc = function () {
               };
+              LatexInc = mistore.backend.latexInc;
+              LatexInc.prototype.start = function (ctx, stream, arg, next) {
+                ctx.template.should.equal('dep-template-text');
+                stream.end('dep-test');
+                next();
+              }
               next();
             });
             app.get(

@@ -1,6 +1,7 @@
 var fs = require('fs'),
     isArray = require('util').isArray,
     async = require('async'),
+    Blocker = require('./lib/blocker'),
     files;
 module.exports = function (app, next) {
   app.use(function (req, res, next) {
@@ -23,7 +24,6 @@ module.exports = function (app, next) {
         callback = arg;
         arg = null;
       }
-      stream.once('end', callback);
       if (typeof key === 'string') {
         req.db.get(
           key,
@@ -43,7 +43,8 @@ module.exports = function (app, next) {
     function _render(doc, stream, arg, callback) {
       var backend,
           dependencyFactory,
-          error;
+          error,
+          blocker;
 
       /* The right backend is choosen using the type field of the
        * document. */
@@ -66,13 +67,26 @@ module.exports = function (app, next) {
          * trees but means also that the backend needs to make sure that
          * all dependencies are rendered before using them. */
 
-        backend = new backend(doc, stream, arg);
+        backend = new backend();
         if (isArray(doc.dependencies)) {
+          blocker = new Blocker(doc.dependencies.length);
+          blocker.once(
+            'end', 
+            function () {
+              backend.start.bind(backend, doc, stream, arg, callback)();
+            }
+          );
           async.forEach(
             doc.dependencies,
             function (d, callback) {
-              render(d, backend.dependencyStream(d), callback);
+              var stream = backend.dependencyStream(d);
+              blocker.push(stream);
+              render(d, stream, callback);
             }
+          );
+        } else {
+          process.nextTick(
+            backend.start.bind(backend, doc, stream, arg, callback)
           );
         }
       }

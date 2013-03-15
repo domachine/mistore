@@ -17,50 +17,49 @@ module.exports = function (app, callback) {
   latexTemp = config.latexTemp || '/tmp';
   app.use(function (req, res, next) {
     var mistore = req.mistore;
-    function Backend(context, stream, ctx) {
-      var blocker = this.blocker = null;
-      function render(dependecyStreams) {
-
-        /*! The renderer itself uses the ejs-latex backend to generate the tex
-         * source. */
-
-        var EJSLatex = req.mistore.backend['ejs-latex'],
-            stringStream = new StringStream(),
-            ejsLatex,
-            dependecyStreams = dependecyStreams || [];
-        stringStream.on('end', function () {
-
-          /*! The generated source is then fed into node-tex. */
-
-          nodeTex(
-            stringStream,
-            dependecyStreams,
-            function (error, pdfStream) {
-
-              /*! Which then produces the PDF stream which is exposed to the
-               * output */
-
-              pdfStream.pipe(stream);
-            }
-          );
-        });
-        ejsLatex = new EJSLatex(context, stringStream, ctx);
-      }
-      if (context.dependencies) {
-
-        /*! Since we have to wait for all dependencies to be written to disk we
-         * use a blocker instance to synchronize them. */
-
-        blocker = new mistore.Blocker(context.dependencies.length);
-        blocker.once('end', render);
-      } else {
-        process.nextTick(render);
-      }
+    function Backend() {
+      this._dependencyStreams = [];
     }
-    Backend.dependencyStream = function (name) {
+    Backend.prototype.start = function (doc, stream, arg, next) {
+
+      /*! The renderer itself uses the ejs-latex backend to generate the tex
+       * source. */
+
+      var EJSLatex = req.mistore.backend['ejs-latex'],
+          stringStream = new StringStream(),
+          ejsLatex;
+      function render(error) {
+        if (error) {
+          next(error);
+          return;
+        }
+
+        /*! The generated source is then fed into node-tex. */
+
+        nodeTex(
+          stringStream,
+          this._dependencyStreams,
+          function (error, pdfStream) {
+            if (error) {
+              next(error);
+              return;
+            }
+
+            /*! Which then produces the PDF stream which is exposed to the
+             * output */
+
+            stream.once('end', next);
+            pdfStream.pipe(stream);
+          }
+        );
+      };
+      ejsLatex = new EJSLatex();
+      ejsLatex.start(doc, stringStream, arg, render);
+    };
+    Backend.prototype.dependencyStream = function (name) {
       var s = new StreamString();
       s.filename = name;
-      this.blocker.push(s);
+      this._dependencyStreams.push(s);
       return s;
     };
     mistore.backend.latex = Backend;
