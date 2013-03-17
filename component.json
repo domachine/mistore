@@ -8,5 +8,9 @@
     "mikanda/mikenchin-nanu": "*"
   },
   "development": {},
+  "scripts": [
+    "index.js",
+    "lib/blocker.js"
+  ],
   "license": "MIT"
 }
