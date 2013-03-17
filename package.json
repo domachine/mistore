@@ -1,14 +1,4 @@
 {
-  "name": "mistore",
-  "version": "0.0.2",
-  "description": "ERROR: No README.md file found!",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha test"
-  },
-  "repository": "",
-  "author": "mikanda IT Solutions",
-  "license": "GPL",
   "dependencies": {
     "ejs": "git://github.com/visionmedia/ejs.git",
     "string-stream": "*",

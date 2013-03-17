@@ -1,0 +1,12 @@
+{
+  "name": "mistore",
+  "repo": "domachine/mistore",
+  "description": "A document management framework for node.js",
+  "version": "0.0.2",
+  "keywords": [ "mikenchin", "document", "management" ],
+  "dependencies": {
+    "mikanda/mikenchin-nanu": "*"
+  },
+  "development": {},
+  "license": "MIT",
+}
