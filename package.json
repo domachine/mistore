@@ -1,13 +1,28 @@
 {
+  "readmeFilename": "Readme.md",
+  "name": "mikanda-mistore",
+  "description": "A document management framework for node.js",
+  "version": "0.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mikanda/mistore.git"
+  },
   "dependencies": {
-    "ejs": "git://github.com/visionmedia/ejs.git",
     "string-stream": "*",
-    "node-tex": "*",
-    "escape-latex": "*"
+    "mikenchin-nanu": "*"
   },
   "devDependencies": {
     "supertest": "*",
     "should": "*",
     "mockery": "*"
-  }
+  },
+  "author": "mikanda IT Solutions",
+  "license": "GPL"
 }
