@@ -2,7 +2,7 @@
   "readmeFilename": "Readme.md",
   "name": "mistore",
   "description": "A document management framework for node.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "index.js",
   "directories": {
     "test": "test"
