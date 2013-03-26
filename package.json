@@ -1,6 +1,6 @@
 {
   "readmeFilename": "Readme.md",
-  "name": "mikanda-mistore",
+  "name": "mistore",
   "description": "A document management framework for node.js",
   "version": "0.0.3",
   "main": "index.js",
