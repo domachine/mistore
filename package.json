@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "string-stream": "*",
-    "mikenchin-nanu": "*"
+    "mikenchin-nanu": "~0.1.0",
+    "async": "~0.2.7"
   },
   "devDependencies": {
     "supertest": "*",
